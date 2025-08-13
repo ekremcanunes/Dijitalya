@@ -1,2 +1,3 @@
 wwwroot\placeholder-image.jpg
 wwwroot\uploads\products\03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png
+wwwroot\uploads\products\7a2bda34-0f39-4387-abe6-7a0d6e6085a9.png

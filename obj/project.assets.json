@@ -3162,9 +3162,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Devops\\EkoPazar\\EkoPazar.csproj",
-      "projectName": "EkoPazar",
-      "projectPath": "C:\\Devops\\EkoPazar\\EkoPazar.csproj",
+      "projectUniqueName": "C:\\Devops\\EkoPazar\\Dijitalya.csproj",
+      "projectName": "Dijitalya",
+      "projectPath": "C:\\Devops\\EkoPazar\\Dijitalya.csproj",
       "packagesPath": "C:\\Users\\acer\\.nuget\\packages\\",
       "outputPath": "C:\\Devops\\EkoPazar\\obj\\",
       "projectStyle": "PackageReference",

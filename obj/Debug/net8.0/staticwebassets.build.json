@@ -1,27 +1,27 @@
 {
   "Version": 1,
-  "Hash": "jHGf0RaWpPEmAQEHHyZApyP0swR+9ooJp7Ui5J8/2OY=",
-  "Source": "EkoPazar",
-  "BasePath": "_content/EkoPazar",
+  "Hash": "Bsd2ZfFMLnUNXAAjW5KqNky9HyVbhOLxv8tUmxsnEbY=",
+  "Source": "Dijitalya",
+  "BasePath": "_content/Dijitalya",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [
     {
-      "Name": "EkoPazar\\wwwroot",
-      "Source": "EkoPazar",
+      "Name": "Dijitalya\\wwwroot",
+      "Source": "Dijitalya",
       "ContentRoot": "C:\\Devops\\EkoPazar\\wwwroot\\",
-      "BasePath": "_content/EkoPazar",
+      "BasePath": "_content/Dijitalya",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
       "Identity": "C:\\Devops\\EkoPazar\\wwwroot\\placeholder-image.jpg",
-      "SourceId": "EkoPazar",
+      "SourceId": "Dijitalya",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Devops\\EkoPazar\\wwwroot\\",
-      "BasePath": "_content/EkoPazar",
+      "BasePath": "_content/Dijitalya",
       "RelativePath": "placeholder-image#[.{fingerprint}]?.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
@@ -39,10 +39,10 @@
     },
     {
       "Identity": "C:\\Devops\\EkoPazar\\wwwroot\\uploads\\products\\03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png",
-      "SourceId": "EkoPazar",
+      "SourceId": "Dijitalya",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Devops\\EkoPazar\\wwwroot\\",
-      "BasePath": "_content/EkoPazar",
+      "BasePath": "_content/Dijitalya",
       "RelativePath": "uploads/products/03947aa0-9fc3-4d00-bb7f-c7350d44b1a7#[.{fingerprint}]?.png",
       "AssetKind": "All",
       "AssetMode": "All",
@@ -57,6 +57,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\products\\03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png"
+    },
+    {
+      "Identity": "C:\\Devops\\EkoPazar\\wwwroot\\uploads\\products\\7a2bda34-0f39-4387-abe6-7a0d6e6085a9.png",
+      "SourceId": "Dijitalya",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Devops\\EkoPazar\\wwwroot\\",
+      "BasePath": "_content/Dijitalya",
+      "RelativePath": "uploads/products/7a2bda34-0f39-4387-abe6-7a0d6e6085a9#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "ajethmyhbn",
+      "Integrity": "KuiTPQ/ApJ/FOtwt5n0dz8B7EjVp1BLJCwlireWaUfE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\products\\7a2bda34-0f39-4387-abe6-7a0d6e6085a9.png"
     }
   ],
   "Endpoints": [
@@ -211,6 +232,88 @@
         {
           "Name": "Last-Modified",
           "Value": "Wed, 13 Aug 2025 17:06:42 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-KuiTPQ/ApJ/FOtwt5n0dz8B7EjVp1BLJCwlireWaUfE="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/products/7a2bda34-0f39-4387-abe6-7a0d6e6085a9.ajethmyhbn.png",
+      "AssetFile": "C:\\Devops\\EkoPazar\\wwwroot\\uploads\\products\\7a2bda34-0f39-4387-abe6-7a0d6e6085a9.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "60543"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KuiTPQ/ApJ/FOtwt5n0dz8B7EjVp1BLJCwlireWaUfE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 13 Aug 2025 18:52:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "ajethmyhbn"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/products/7a2bda34-0f39-4387-abe6-7a0d6e6085a9.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-KuiTPQ/ApJ/FOtwt5n0dz8B7EjVp1BLJCwlireWaUfE="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/products/7a2bda34-0f39-4387-abe6-7a0d6e6085a9.png",
+      "AssetFile": "C:\\Devops\\EkoPazar\\wwwroot\\uploads\\products\\7a2bda34-0f39-4387-abe6-7a0d6e6085a9.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "60543"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KuiTPQ/ApJ/FOtwt5n0dz8B7EjVp1BLJCwlireWaUfE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 13 Aug 2025 18:52:24 GMT"
         },
         {
           "Name": "Cache-Control",

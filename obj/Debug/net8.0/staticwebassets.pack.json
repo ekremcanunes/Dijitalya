@@ -9,24 +9,28 @@
       "PackagePath": "staticwebassets\\uploads\\products\\03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EkoPazar.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "Id": "C:\\Devops\\EkoPazar\\wwwroot\\uploads\\products\\7a2bda34-0f39-4387-abe6-7a0d6e6085a9.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\7a2bda34-0f39-4387-abe6-7a0d6e6085a9.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Dijitalya.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EkoPazar.Microsoft.AspNetCore.StaticWebAssets.props",
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.Dijitalya.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.EkoPazar.props",
-      "PackagePath": "build\\EkoPazar.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.Dijitalya.props",
+      "PackagePath": "build\\Dijitalya.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.EkoPazar.props",
-      "PackagePath": "buildMultiTargeting\\EkoPazar.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.Dijitalya.props",
+      "PackagePath": "buildMultiTargeting\\Dijitalya.props"
     },
     {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.EkoPazar.props",
-      "PackagePath": "buildTransitive\\EkoPazar.props"
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.Dijitalya.props",
+      "PackagePath": "buildTransitive\\Dijitalya.props"
     }
   ],
   "ElementsToRemove": []
