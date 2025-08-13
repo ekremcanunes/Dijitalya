@@ -152,10 +152,14 @@ const OrdersPage = () => {
                                             >
                                                 <div className="flex items-center space-x-3">
                                                     <img
-                                                        src={item.productImageUrl || '/placeholder-image.jpg'}
+                                                        src={item.productImageUrl ? `https://localhost:7203${item.productImageUrl}` : 'https://localhost:7203/placeholder-image.jpg'}
                                                         alt={item.productName}
                                                         className="h-12 w-12 object-cover rounded"
-                                                        onError={(e) => { e.target.src = '/placeholder-image.jpg'; }}
+                                                        onError={(e) => {
+                                                            if (e.target.src !== 'https://localhost:7203/placeholder-image.jpg') {
+                                                                e.target.src = 'https://localhost:7203/placeholder-image.jpg';
+                                                            }
+                                                        }}
                                                     />
                                                     <div>
                                                         <p className="font-medium text-gray-900">

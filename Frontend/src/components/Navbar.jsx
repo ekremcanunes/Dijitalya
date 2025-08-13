@@ -23,6 +23,9 @@ const Navbar = () => {
         return location.pathname === path;
     };
 
+    // Admin kontrolü - email'e göre (geliştirilebilir)
+    const isAdmin = user?.email === 'admin@ekopazar.com';
+
     return (
         <nav className="bg-blue-600 text-white shadow-lg sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,8 +45,8 @@ const Navbar = () => {
                             <Link
                                 to="/"
                                 className={`px-3 py-2 rounded transition-colors ${isActiveRoute('/')
-                                        ? 'bg-blue-700 text-white'
-                                        : 'hover:bg-blue-700'
+                                    ? 'bg-blue-700 text-white'
+                                    : 'hover:bg-blue-700'
                                     }`}
                             >
                                 Ana Sayfa
@@ -51,8 +54,8 @@ const Navbar = () => {
                             <Link
                                 to="/products"
                                 className={`px-3 py-2 rounded transition-colors ${isActiveRoute('/products')
-                                        ? 'bg-blue-700 text-white'
-                                        : 'hover:bg-blue-700'
+                                    ? 'bg-blue-700 text-white'
+                                    : 'hover:bg-blue-700'
                                     }`}
                             >
                                 Ürünler
@@ -62,26 +65,42 @@ const Navbar = () => {
 
                     {/* Sağ taraf menü */}
                     <div className="hidden md:flex items-center space-x-4">
+                        {/* Sepet linki - artık herkese görünür */}
+                        <Link
+                            to="/cart"
+                            className={`flex items-center px-3 py-2 rounded transition-colors ${isActiveRoute('/cart')
+                                ? 'bg-blue-700 text-white'
+                                : 'hover:bg-blue-700'
+                                }`}
+                        >
+                            🛒 Sepet
+                        </Link>
+
                         {user ? (
                             <>
                                 <Link
-                                    to="/cart"
-                                    className={`flex items-center px-3 py-2 rounded transition-colors ${isActiveRoute('/cart')
-                                            ? 'bg-blue-700 text-white'
-                                            : 'hover:bg-blue-700'
-                                        }`}
-                                >
-                                    🛒 Sepet
-                                </Link>
-                                <Link
                                     to="/orders"
                                     className={`flex items-center px-3 py-2 rounded transition-colors ${isActiveRoute('/orders')
-                                            ? 'bg-blue-700 text-white'
-                                            : 'hover:bg-blue-700'
+                                        ? 'bg-blue-700 text-white'
+                                        : 'hover:bg-blue-700'
                                         }`}
                                 >
                                     📦 Siparişler
                                 </Link>
+
+                                {/* Admin Panel Linki */}
+                                {isAdmin && (
+                                    <Link
+                                        to="/admin"
+                                        className={`flex items-center px-3 py-2 rounded transition-colors ${location.pathname.startsWith('/admin')
+                                            ? 'bg-yellow-500 text-white'
+                                            : 'bg-yellow-400 text-yellow-900 hover:bg-yellow-300'
+                                            }`}
+                                    >
+                                        👑 Admin Panel
+                                    </Link>
+                                )}
+
                                 <div className="flex items-center space-x-3">
                                     <span className="text-sm font-medium">
                                         Hoş geldin, {user.firstName}
@@ -152,8 +171,8 @@ const Navbar = () => {
                                 to="/"
                                 onClick={closeMobileMenu}
                                 className={`block px-3 py-2 rounded transition-colors ${isActiveRoute('/')
-                                        ? 'bg-blue-700 text-white'
-                                        : 'hover:bg-blue-700'
+                                    ? 'bg-blue-700 text-white'
+                                    : 'hover:bg-blue-700'
                                     }`}
                             >
                                 Ana Sayfa
@@ -162,35 +181,52 @@ const Navbar = () => {
                                 to="/products"
                                 onClick={closeMobileMenu}
                                 className={`block px-3 py-2 rounded transition-colors ${isActiveRoute('/products')
-                                        ? 'bg-blue-700 text-white'
-                                        : 'hover:bg-blue-700'
+                                    ? 'bg-blue-700 text-white'
+                                    : 'hover:bg-blue-700'
                                     }`}
                             >
                                 Ürünler
                             </Link>
 
+                            {/* Mobile Sepet linki - artık herkese görünür */}
+                            <Link
+                                to="/cart"
+                                onClick={closeMobileMenu}
+                                className={`block px-3 py-2 rounded transition-colors ${isActiveRoute('/cart')
+                                    ? 'bg-blue-700 text-white'
+                                    : 'hover:bg-blue-700'
+                                    }`}
+                            >
+                                🛒 Sepet
+                            </Link>
+
                             {user ? (
                                 <>
-                                    <Link
-                                        to="/cart"
-                                        onClick={closeMobileMenu}
-                                        className={`block px-3 py-2 rounded transition-colors ${isActiveRoute('/cart')
-                                                ? 'bg-blue-700 text-white'
-                                                : 'hover:bg-blue-700'
-                                            }`}
-                                    >
-                                        🛒 Sepet
-                                    </Link>
                                     <Link
                                         to="/orders"
                                         onClick={closeMobileMenu}
                                         className={`block px-3 py-2 rounded transition-colors ${isActiveRoute('/orders')
-                                                ? 'bg-blue-700 text-white'
-                                                : 'hover:bg-blue-700'
+                                            ? 'bg-blue-700 text-white'
+                                            : 'hover:bg-blue-700'
                                             }`}
                                     >
                                         📦 Siparişler
                                     </Link>
+
+                                    {/* Mobile Admin Panel Linki */}
+                                    {isAdmin && (
+                                        <Link
+                                            to="/admin"
+                                            onClick={closeMobileMenu}
+                                            className={`block px-3 py-2 rounded transition-colors ${location.pathname.startsWith('/admin')
+                                                ? 'bg-yellow-500 text-white'
+                                                : 'bg-yellow-400 text-yellow-900 hover:bg-yellow-300'
+                                                }`}
+                                        >
+                                            👑 Admin Panel
+                                        </Link>
+                                    )}
+
                                     <div className="px-3 py-2 text-sm">
                                         Hoş geldin, {user.firstName}
                                     </div>

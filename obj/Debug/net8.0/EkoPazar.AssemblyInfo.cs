@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EkoPazar")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8a207fe015bae814b0050d0eafba19183e9203b2")]
 [assembly: System.Reflection.AssemblyProductAttribute("EkoPazar")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EkoPazar")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

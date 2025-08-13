@@ -11,7 +11,6 @@ const ProductsPage = () => {
     const [categories, setCategories] = useState([]);
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
 
     useEffect(() => {
@@ -36,16 +35,13 @@ const ProductsPage = () => {
     };
 
     const handleAddToCart = async (productId, quantity = 1) => {
-        // User kontrolü kaldırıldı - herkes sepete ekleyebilir
-        setLoading(true);
+        // Global loading kaldırıldı - her ProductCard kendi loading'ini yönetiyor
         try {
             await ApiService.addToCart(productId, quantity);
             alert('Ürün sepete eklendi!');
         } catch (error) {
             console.error('Add to cart error:', error);
             alert('Sepete eklerken bir hata oluştu: ' + error.message);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -101,24 +97,14 @@ const ProductsPage = () => {
                 />
             </div>
 
-            {/* Loading indicator */}
-            {loading && (
-                <div className="text-center text-blue-600 mb-4">
-                    <div className="inline-flex items-center">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                        İşlem yapılıyor...
-                    </div>
-                </div>
-            )}
-
             {/* Ürün listesi */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {filterProducts().map(product => (
                     <ProductCard
                         key={product.id}
                         product={product}
-                        onAddToCart={handleAddToCart} // User kontrolü kaldırıldı
-                        disabled={loading}
+                        onAddToCart={handleAddToCart}
+                    // disabled prop kaldırıldı - ProductCard kendi loading state'ini yönetiyor
                     />
                 ))}
             </div>

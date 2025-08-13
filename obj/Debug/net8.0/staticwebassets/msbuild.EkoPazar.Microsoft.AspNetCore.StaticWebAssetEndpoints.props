@@ -1,0 +1,28 @@
+﻿<Project>
+  <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/EkoPazar/placeholder-image.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\placeholder-image.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-liV6EJH81oaPihZs\u002B2QK3VROqssnvJPi62CIT7RpUEM="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"953"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022liV6EJH81oaPihZs\u002B2QK3VROqssnvJPi62CIT7RpUEM=\u0022"},{"Name":"Last-Modified","Value":"Wed, 13 Aug 2025 17:09:43 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/EkoPazar/placeholder-image.uzazczswbj.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\placeholder-image.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"uzazczswbj"},{"Name":"integrity","Value":"sha256-liV6EJH81oaPihZs\u002B2QK3VROqssnvJPi62CIT7RpUEM="},{"Name":"label","Value":"_content/EkoPazar/placeholder-image.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"953"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022liV6EJH81oaPihZs\u002B2QK3VROqssnvJPi62CIT7RpUEM=\u0022"},{"Name":"Last-Modified","Value":"Wed, 13 Aug 2025 17:09:43 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/EkoPazar/uploads/products/03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.ajethmyhbn.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\products\03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ajethmyhbn"},{"Name":"integrity","Value":"sha256-KuiTPQ/ApJ/FOtwt5n0dz8B7EjVp1BLJCwlireWaUfE="},{"Name":"label","Value":"_content/EkoPazar/uploads/products/03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"60543"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022KuiTPQ/ApJ/FOtwt5n0dz8B7EjVp1BLJCwlireWaUfE=\u0022"},{"Name":"Last-Modified","Value":"Wed, 13 Aug 2025 17:06:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/EkoPazar/uploads/products/03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\products\03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-KuiTPQ/ApJ/FOtwt5n0dz8B7EjVp1BLJCwlireWaUfE="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"60543"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022KuiTPQ/ApJ/FOtwt5n0dz8B7EjVp1BLJCwlireWaUfE=\u0022"},{"Name":"Last-Modified","Value":"Wed, 13 Aug 2025 17:06:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+  </ItemGroup>
+</Project>

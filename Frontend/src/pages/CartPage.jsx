@@ -1,8 +1,10 @@
 ﻿// ===== CartPage.jsx =====
 import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ApiService from '../api/ApiService';
 
 const CartPage = () => {
+    const navigate = useNavigate();
     const [cart, setCart] = useState({ items: [], total: 0, itemCount: 0 });
     const [loading, setLoading] = useState(false);
     const [actionLoading, setActionLoading] = useState(false);
@@ -53,29 +55,16 @@ const CartPage = () => {
         }
     };
 
-    const handleCreateOrder = async () => {
+    const handleCheckout = () => {
         if (cart.items.length === 0) {
             alert('Sepetiniz boş!');
             return;
         }
+        navigate('/checkout');
+    };
 
-        const address = prompt('Teslimat adresinizi girin:');
-        if (!address || address.trim() === '') {
-            alert('Teslimat adresi gereklidir!');
-            return;
-        }
-
-        setActionLoading(true);
-        try {
-            await ApiService.createOrder({ shippingAddress: address.trim() });
-            alert('Sipariş başarıyla oluşturuldu!');
-            await loadCart(); // Sepeti temizle
-        } catch (error) {
-            console.error('Order creation error:', error);
-            alert('Sipariş oluşturulurken hata oluştu: ' + error.message);
-        } finally {
-            setActionLoading(false);
-        }
+    const handleContinueShopping = () => {
+        navigate('/products');
     };
 
     if (loading) {
@@ -97,8 +86,18 @@ const CartPage = () => {
             {cart.items.length === 0 ? (
                 <div className="text-center py-12">
                     <div className="text-6xl mb-4">🛒</div>
-                    <p className="text-xl text-gray-500 mb-4">Sepetiniz boş</p>
-                    <p className="text-gray-400">Alışverişe başlamak için ürünler sayfasını ziyaret edin.</p>
+                    <h2 className="text-xl font-semibold text-gray-700 mb-2">
+                        Sepetiniz boş
+                    </h2>
+                    <p className="text-gray-500 mb-6">
+                        Alışverişe başlamak için ürünler sayfasını ziyaret edin.
+                    </p>
+                    <button
+                        onClick={handleContinueShopping}
+                        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    >
+                        Alışverişe Başla
+                    </button>
                 </div>
             ) : (
                 <>
@@ -185,20 +184,35 @@ const CartPage = () => {
                         </table>
                     </div>
 
-                    {/* Toplam ve sipariş verme */}
+                    {/* Toplam ve işlemler */}
                     <div className="bg-white rounded-lg shadow p-6">
                         <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-                            <div className="text-2xl font-bold text-gray-900">
-                                Toplam: ₺{cart.total?.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                            <div>
+                                <button
+                                    onClick={handleContinueShopping}
+                                    className="text-blue-600 hover:text-blue-800 font-medium"
+                                >
+                                    ← Alışverişe Devam Et
+                                </button>
                             </div>
 
-                            <button
-                                onClick={handleCreateOrder}
-                                disabled={actionLoading}
-                                className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
-                            >
-                                {actionLoading ? 'İşlem yapılıyor...' : 'Sipariş Ver'}
-                            </button>
+                            <div className="text-right">
+                                <div className="text-2xl font-bold text-gray-900 mb-4">
+                                    Toplam: ₺{cart.total?.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                                </div>
+
+                                <button
+                                    onClick={handleCheckout}
+                                    disabled={actionLoading}
+                                    className="bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition-colors font-medium disabled:bg-gray-400 disabled:cursor-not-allowed"
+                                >
+                                    {actionLoading ? 'İşlem yapılıyor...' : 'Sipariş Ver'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="mt-4 text-sm text-gray-600 text-center">
+                            <p>• Kargo ücretsiz • Güvenli ödeme • 14 gün iade garantisi</p>
                         </div>
                     </div>
                 </>

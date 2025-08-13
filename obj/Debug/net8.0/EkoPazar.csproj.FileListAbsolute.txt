@@ -116,4 +116,6 @@ C:\Devops\EkoPazar\obj\Debug\net8.0\EkoPazar.genruntimeconfig.cache
 C:\Devops\EkoPazar\obj\Debug\net8.0\ref\EkoPazar.dll
 C:\Devops\EkoPazar\bin\Debug\net8.0\Frontend\package-lock.json
 C:\Devops\EkoPazar\bin\Debug\net8.0\Frontend\package.json
+C:\Devops\EkoPazar\obj\Debug\net8.0\EkoPazar.sourcelink.json
+C:\Devops\EkoPazar\bin\Debug\net8.0\EkoPazar.staticwebassets.runtime.json
 C:\Devops\EkoPazar\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

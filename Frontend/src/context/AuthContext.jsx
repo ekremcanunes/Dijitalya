@@ -1,96 +1,192 @@
-// ===== AuthContext.jsx =====
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import ApiService from '../api/ApiService';
 
 const AuthContext = createContext();
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error('useAuth must be used within an AuthProvider');
+const initialState = {
+    user: null,
+    token: null,
+    loading: true,
+    isAuthenticated: false
+};
+
+const authReducer = (state, action) => {
+    switch (action.type) {
+        case 'SET_LOADING':
+            return { ...state, loading: action.payload };
+        case 'LOGIN_SUCCESS':
+            return {
+                ...state,
+                user: action.payload.user,
+                token: action.payload.token,
+                isAuthenticated: true,
+                loading: false
+            };
+        case 'LOGOUT':
+            return {
+                ...state,
+                user: null,
+                token: null,
+                isAuthenticated: false,
+                loading: false
+            };
+        case 'INIT_AUTH':
+            return {
+                ...state,
+                user: action.payload.user,
+                token: action.payload.token,
+                isAuthenticated: !!action.payload.user,
+                loading: false
+            };
+        default:
+            return state;
     }
-    return context;
 };
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [state, dispatch] = useReducer(authReducer, initialState);
 
     useEffect(() => {
-        // Sayfa yüklendiðinde token kontrolü
-        const token = localStorage.getItem('token');
-        const userData = localStorage.getItem('user');
-
-        if (token && userData) {
+        // Sayfa yüklendiðinde localStorage'dan bilgileri kontrol et
+        const initializeAuth = () => {
             try {
-                const parsedUser = JSON.parse(userData);
-                setUser(parsedUser);
+                const token = localStorage.getItem('token');
+                const userStr = localStorage.getItem('user');
+
+                if (token && userStr) {
+                    const user = JSON.parse(userStr);
+                    dispatch({
+                        type: 'INIT_AUTH',
+                        payload: { user, token }
+                    });
+                } else {
+                    dispatch({ type: 'SET_LOADING', payload: false });
+                }
             } catch (error) {
-                console.error('Invalid user data in localStorage:', error);
+                console.error('Auth initialization error:', error);
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
+                dispatch({ type: 'SET_LOADING', payload: false });
             }
+        };
+
+        initializeAuth();
+
+        // Pending order kontrolü - kayýt/giriþ sonrasý
+        const checkPendingOrder = () => {
+            const pendingOrder = localStorage.getItem('pendingOrder');
+            if (pendingOrder && state.isAuthenticated) {
+                try {
+                    const orderData = JSON.parse(pendingOrder);
+                    // Pending order'ý iþle
+                    handlePendingOrder(orderData);
+                    localStorage.removeItem('pendingOrder');
+                } catch (error) {
+                    console.error('Pending order processing error:', error);
+                    localStorage.removeItem('pendingOrder');
+                }
+            }
+        };
+
+        if (!state.loading) {
+            checkPendingOrder();
         }
-        setLoading(false);
-    }, []);
+    }, [state.loading, state.isAuthenticated]);
+
+    const handlePendingOrder = async (orderData) => {
+        try {
+            // Sipariþ oluþtur
+            await ApiService.createOrder({
+                shippingAddress: orderData.shippingAddress
+            });
+            alert('Sipariþ baþarýyla oluþturuldu!');
+            window.location.href = '/orders';
+        } catch (error) {
+            console.error('Pending order creation error:', error);
+            alert('Sipariþ oluþturulurken hata oluþtu: ' + error.message);
+        }
+    };
 
     const login = async (email, password) => {
         try {
-            const response = await ApiService.login(email, password);
+            const result = await ApiService.login(email, password);
 
-            if (response.success && response.accessToken) {
-                localStorage.setItem('token', response.accessToken);
-                localStorage.setItem('user', JSON.stringify(response.user));
-                setUser(response.user);
+            if (result.success) {
+                // Token ve user bilgilerini localStorage'a kaydet
+                localStorage.setItem('token', result.accessToken);
+                localStorage.setItem('user', JSON.stringify(result.user));
 
-                return { success: true, message: response.message };
-            } else {
-                return { success: false, message: response.message || 'Giriþ baþarýsýz' };
+                if (result.refreshToken) {
+                    localStorage.setItem('refreshToken', result.refreshToken);
+                }
+
+                dispatch({
+                    type: 'LOGIN_SUCCESS',
+                    payload: {
+                        user: result.user,
+                        token: result.accessToken
+                    }
+                });
+
+                return result;
             }
+
+            return result;
         } catch (error) {
             console.error('Login error:', error);
-            return {
-                success: false,
-                message: error.message || 'Giriþ yapýlýrken hata oluþtu'
-            };
+            throw error;
         }
     };
 
     const register = async (userData) => {
         try {
-            const response = await ApiService.register(userData);
+            const result = await ApiService.register(userData);
 
-            if (response.success && response.accessToken) {
-                localStorage.setItem('token', response.accessToken);
-                localStorage.setItem('user', JSON.stringify(response.user));
-                setUser(response.user);
+            if (result.success) {
+                // Token ve user bilgilerini localStorage'a kaydet
+                localStorage.setItem('token', result.accessToken);
+                localStorage.setItem('user', JSON.stringify(result.user));
 
-                return { success: true, message: response.message };
-            } else {
-                return { success: false, message: response.message || 'Kayýt baþarýsýz' };
+                if (result.refreshToken) {
+                    localStorage.setItem('refreshToken', result.refreshToken);
+                }
+
+                dispatch({
+                    type: 'LOGIN_SUCCESS',
+                    payload: {
+                        user: result.user,
+                        token: result.accessToken
+                    }
+                });
+
+                return result;
             }
+
+            return result;
         } catch (error) {
             console.error('Register error:', error);
-            return {
-                success: false,
-                message: error.message || 'Kayýt olurken hata oluþtu'
-            };
+            throw error;
         }
     };
 
     const logout = () => {
+        // localStorage'ý temizle
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        setUser(null);
+        localStorage.removeItem('refreshToken');
+
+        // State'i sýfýrla
+        dispatch({ type: 'LOGOUT' });
     };
 
     const value = {
-        user,
+        user: state.user,
+        token: state.token,
+        loading: state.loading,
+        isAuthenticated: state.isAuthenticated,
         login,
         register,
-        logout,
-        loading
+        logout
     };
 
     return (
@@ -98,4 +194,12 @@ export const AuthProvider = ({ children }) => {
             {children}
         </AuthContext.Provider>
     );
+};
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
 };

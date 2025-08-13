@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace EkoPazar.Models
 {
@@ -18,8 +19,11 @@ namespace EkoPazar.Models
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
 
-        // Navigation properties
+        // Navigation properties - JsonIgnore ekleyerek circular reference'ı önle
+        [JsonIgnore]
         public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+
+        [JsonIgnore]
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 
@@ -49,7 +53,12 @@ namespace EkoPazar.Models
 
         // Navigation properties
         public virtual Category Category { get; set; } = null!;
+
+        // Bu collection'ları JsonIgnore ile işaretleyelim
+        [JsonIgnore]
         public virtual ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+
+        [JsonIgnore]
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 
@@ -65,18 +74,17 @@ namespace EkoPazar.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
+        // Navigation properties - Products collection'ı JsonIgnore ile işaretle
+        [JsonIgnore]
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
     }
-
-    // ApplicationUser.cs içindeki CartItem sınıfının güncellenmiş hali
 
     public class CartItem
     {
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; } = string.Empty; // Bu alan artık nullable değil ve string
+        public string UserId { get; set; } = string.Empty; // Sadece string - foreign key YOK
 
         public int ProductId { get; set; }
 
@@ -85,9 +93,8 @@ namespace EkoPazar.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
-        // User navigation property'sini tamamen nullable yap ve foreign key constraint'i kaldır
-        public ApplicationUser? User { get; set; }
+        // User navigation property KALDIRILDI - sorun buradaydı!
+        // public ApplicationUser? User { get; set; } // ← BU SATIR SİLİNDİ
 
         [ForeignKey("ProductId")]
         public Product Product { get; set; } = null!;
@@ -112,7 +119,9 @@ namespace EkoPazar.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
+        [JsonIgnore]
         public virtual ApplicationUser User { get; set; } = null!;
+
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 
@@ -133,7 +142,9 @@ namespace EkoPazar.Models
         public decimal UnitPrice { get; set; }
 
         // Navigation properties
+        [JsonIgnore]
         public virtual Order Order { get; set; } = null!;
+
         public virtual Product Product { get; set; } = null!;
     }
 

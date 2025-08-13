@@ -27,10 +27,14 @@ const ProductCard = ({ product, onAddToCart, disabled = false }) => {
             {/* Ürün resmi */}
             <div className="relative mb-4">
                 <img
-                    src={product.imageUrl || '/placeholder-image.jpg'}
+                    src={product.imageUrl ? `https://localhost:7203${product.imageUrl}` : 'https://localhost:7203/placeholder-image.jpg'}
                     alt={product.name}
                     className="w-full h-48 object-cover rounded"
-                    onError={(e) => { e.target.src = '/placeholder-image.jpg'; }}
+                    onError={(e) => {
+                        if (e.target.src !== 'https://localhost:7203/placeholder-image.jpg') {
+                            e.target.src = 'https://localhost:7203/placeholder-image.jpg';
+                        }
+                    }}
                 />
                 {isOutOfStock && (
                     <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded">

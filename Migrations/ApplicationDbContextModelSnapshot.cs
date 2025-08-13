@@ -113,6 +113,9 @@ namespace EkoPazar.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -129,10 +132,9 @@ namespace EkoPazar.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ApplicationUserId");
 
-                    b.HasIndex("UserId", "ProductId")
-                        .IsUnique();
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartItems");
                 });
@@ -159,47 +161,7 @@ namespace EkoPazar.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4031),
-                            Description = "Elektronik ürünler",
-                            Name = "Elektronik"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4035),
-                            Description = "Giyim ürünleri",
-                            Name = "Giyim"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4036),
-                            Description = "Ev ve yaşam ürünleri",
-                            Name = "Ev & Yaşam"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4038),
-                            Description = "Kitaplar",
-                            Name = "Kitap"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4039),
-                            Description = "Spor ürünleri",
-                            Name = "Spor"
-                        });
                 });
 
             modelBuilder.Entity("EkoPazar.Models.Order", b =>
@@ -306,68 +268,6 @@ namespace EkoPazar.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4235),
-                            Description = "Apple iPhone 14 128GB",
-                            ImageUrl = "https://via.placeholder.com/300x300?text=iPhone+14",
-                            IsActive = true,
-                            Name = "iPhone 14",
-                            Price = 25000m,
-                            Stock = 50
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 1,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4249),
-                            Description = "Samsung Galaxy S23 256GB",
-                            ImageUrl = "https://via.placeholder.com/300x300?text=Galaxy+S23",
-                            IsActive = true,
-                            Name = "Samsung Galaxy S23",
-                            Price = 22000m,
-                            Stock = 30
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 5,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4251),
-                            Description = "Nike Air Max Ayakkabı",
-                            ImageUrl = "https://via.placeholder.com/300x300?text=Nike+Air+Max",
-                            IsActive = true,
-                            Name = "Nike Air Max",
-                            Price = 1200m,
-                            Stock = 100
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = 2,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4253),
-                            Description = "Levi's 501 Original Jean",
-                            ImageUrl = "https://via.placeholder.com/300x300?text=Levi%27s+Jean",
-                            IsActive = true,
-                            Name = "Levi's Jean",
-                            Price = 450m,
-                            Stock = 75
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 1,
-                            CreatedAt = new DateTime(2025, 8, 12, 20, 53, 53, 560, DateTimeKind.Utc).AddTicks(4255),
-                            Description = "Apple MacBook Pro M2 13 inch",
-                            ImageUrl = "https://via.placeholder.com/300x300?text=MacBook+Pro",
-                            IsActive = true,
-                            Name = "MacBook Pro",
-                            Price = 35000m,
-                            Stock = 25
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -504,20 +404,17 @@ namespace EkoPazar.Migrations
 
             modelBuilder.Entity("EkoPazar.Models.CartItem", b =>
                 {
+                    b.HasOne("EkoPazar.Models.ApplicationUser", null)
+                        .WithMany("CartItems")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("EkoPazar.Models.Product", "Product")
                         .WithMany("CartItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EkoPazar.Models.ApplicationUser", "User")
-                        .WithMany("CartItems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EkoPazar.Models.Order", b =>
@@ -525,7 +422,7 @@ namespace EkoPazar.Migrations
                     b.HasOne("EkoPazar.Models.ApplicationUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");

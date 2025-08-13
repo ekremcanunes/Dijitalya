@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Devops\\EkoPazar\\wwwroot\\placeholder-image.jpg",
+      "PackagePath": "staticwebassets\\placeholder-image.jpg"
+    },
+    {
+      "Id": "C:\\Devops\\EkoPazar\\wwwroot\\uploads\\products\\03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\03947aa0-9fc3-4d00-bb7f-c7350d44b1a7.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EkoPazar.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EkoPazar.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.EkoPazar.props",
+      "PackagePath": "build\\EkoPazar.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.EkoPazar.props",
+      "PackagePath": "buildMultiTargeting\\EkoPazar.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.EkoPazar.props",
+      "PackagePath": "buildTransitive\\EkoPazar.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

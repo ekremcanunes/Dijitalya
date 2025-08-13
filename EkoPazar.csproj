@@ -7951,6 +7951,8 @@
 
   <ItemGroup>
     <Folder Include="Frontend\node_modules\.vite-temp\" />
+    <Folder Include="Frontend\src\pages\admin\" />
+    <Folder Include="wwwroot\uploads\products\" />
   </ItemGroup>
 
 </Project>
