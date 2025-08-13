@@ -1,0 +1,10 @@
+@charset "UTF-8";
+@import 'tailwindcss';
+
+/* Türkçe karakter desteği için font ayarları */
+body {
+    font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
