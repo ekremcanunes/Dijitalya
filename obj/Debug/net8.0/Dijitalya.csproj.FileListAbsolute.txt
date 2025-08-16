@@ -112,10 +112,10 @@ C:\Devops\EkoPazar\obj\Debug\net8.0\staticwebassets\msbuild.build.Dijitalya.prop
 C:\Devops\EkoPazar\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Dijitalya.props
 C:\Devops\EkoPazar\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Dijitalya.props
 C:\Devops\EkoPazar\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Devops\EkoPazar\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Devops\EkoPazar\obj\Debug\net8.0\Dijitalya.csproj.Up2Date
 C:\Devops\EkoPazar\obj\Debug\net8.0\Dijitalya.dll
 C:\Devops\EkoPazar\obj\Debug\net8.0\refint\Dijitalya.dll
 C:\Devops\EkoPazar\obj\Debug\net8.0\Dijitalya.pdb
 C:\Devops\EkoPazar\obj\Debug\net8.0\Dijitalya.genruntimeconfig.cache
 C:\Devops\EkoPazar\obj\Debug\net8.0\ref\Dijitalya.dll
+C:\Devops\EkoPazar\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

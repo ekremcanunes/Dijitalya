@@ -618,6 +618,18 @@
         }
       }
     },
+    "/api/Cart/debug": {
+      "get": {
+        "tags": [
+          "Cart"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Orders": {
       "get": {
         "tags": [

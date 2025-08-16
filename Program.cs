@@ -61,28 +61,32 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Memory cache for session (Hata çözümü)
+// Memory cache for session
 builder.Services.AddMemoryCache();
-builder.Services.AddDistributedMemoryCache(); // Session için gerekli
+builder.Services.AddDistributedMemoryCache();
 
-// Session support for guest users
+// Session support - SON ÇÖZÜM
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromDays(30); // 30 gün
-    options.Cookie.HttpOnly = true;
+    options.IdleTimeout = TimeSpan.FromDays(30);
+    options.Cookie.Name = "EkoPazar.Session";
+    options.Cookie.HttpOnly = false; // JavaScript eriþimi için false
     options.Cookie.IsEssential = true;
-    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // Development ve Production uyumlu
+    options.Cookie.SameSite = SameSiteMode.Lax; // None yerine Lax - daha güvenli
+    options.Cookie.Path = "/";
+    options.Cookie.MaxAge = TimeSpan.FromDays(30);
 });
 
-// CORS
+// CORS - Basitleþtirilmiþ
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
-        policy.WithOrigins("http://localhost:5175", "https://localhost:5175") // React app URL'leri
+        policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
               .AllowAnyHeader()
               .AllowAnyMethod()
-              .AllowCredentials(); // Session cookies için gerekli
+              .AllowCredentials();
     });
 });
 
@@ -91,7 +95,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IAdminService, AdminService>(); // Admin service eklendi
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -140,12 +144,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Static files - uploads klasörü için
+// Static files
 app.UseStaticFiles();
 
+// CORS
 app.UseCors("AllowReactApp");
 
-app.UseSession(); // Session middleware - Authentication'dan önce olmalý
+// Session - Authentication'dan önce
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

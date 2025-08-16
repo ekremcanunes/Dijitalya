@@ -20,124 +20,193 @@ namespace EkoPazar.Services
     public class CartService : ICartService
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<CartService> _logger;
 
-        public CartService(ApplicationDbContext context)
+        public CartService(ApplicationDbContext context, ILogger<CartService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<CartItemDto>> GetCartItemsAsync(string userId)
         {
-            var cartItems = await _context.CartItems
-                .Include(ci => ci.Product)
-                .ThenInclude(p => p.Category)
-                .Where(ci => ci.UserId == userId)
-                .ToListAsync();
+            _logger.LogInformation($"=== GetCartItemsAsync for userId: {userId} ===");
 
-            return cartItems.Select(ci => new CartItemDto
+            try
             {
-                Id = ci.Id,
-                ProductId = ci.ProductId,
-                ProductName = ci.Product.Name,
-                ProductPrice = ci.Product.Price,
-                ProductImageUrl = ci.Product.ImageUrl,
-                Quantity = ci.Quantity,
-                TotalPrice = ci.Product.Price * ci.Quantity
-            });
+                var cartItems = await _context.CartItems
+                    .Include(ci => ci.Product)
+                    .ThenInclude(p => p.Category)
+                    .Where(ci => ci.UserId == userId)
+                    .ToListAsync();
+
+                _logger.LogInformation($"Found {cartItems.Count} cart items in database");
+
+                foreach (var item in cartItems)
+                {
+                    _logger.LogInformation($"Cart item: ID={item.Id}, ProductId={item.ProductId}, ProductName={item.Product?.Name}, Quantity={item.Quantity}, UserId={item.UserId}");
+                }
+
+                var result = cartItems.Select(ci => new CartItemDto
+                {
+                    Id = ci.Id,
+                    ProductId = ci.ProductId,
+                    ProductName = ci.Product.Name,
+                    ProductPrice = ci.Product.Price,
+                    ProductImageUrl = ci.Product.ImageUrl,
+                    Quantity = ci.Quantity,
+                    TotalPrice = ci.Product.Price * ci.Quantity
+                }).ToList();
+
+                _logger.LogInformation($"Returning {result.Count} cart items as DTOs");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error in GetCartItemsAsync for userId: {userId}");
+                throw;
+            }
         }
 
         public async Task<CartItemDto?> AddToCartAsync(string userId, AddToCartDto addToCartDto)
         {
-            var product = await _context.Products.FindAsync(addToCartDto.ProductId);
-            if (product == null || !product.IsActive)
-            {
-                return null;
-            }
+            _logger.LogInformation($"=== AddToCartAsync ===");
+            _logger.LogInformation($"UserId: {userId}");
+            _logger.LogInformation($"ProductId: {addToCartDto.ProductId}");
+            _logger.LogInformation($"Quantity: {addToCartDto.Quantity}");
 
-            if (product.Stock < addToCartDto.Quantity)
+            try
             {
-                throw new InvalidOperationException("Yeterli stok yok.");
-            }
-
-            var existingCartItem = await _context.CartItems
-                .FirstOrDefaultAsync(ci => ci.UserId == userId && ci.ProductId == addToCartDto.ProductId);
-
-            if (existingCartItem != null)
-            {
-                if (product.Stock < existingCartItem.Quantity + addToCartDto.Quantity)
+                var product = await _context.Products.FindAsync(addToCartDto.ProductId);
+                if (product == null || !product.IsActive)
                 {
+                    _logger.LogWarning($"Product not found or inactive: ProductId={addToCartDto.ProductId}");
+                    return null;
+                }
+
+                _logger.LogInformation($"Product found: {product.Name}, Stock: {product.Stock}");
+
+                if (product.Stock < addToCartDto.Quantity)
+                {
+                    _logger.LogWarning($"Insufficient stock. Required: {addToCartDto.Quantity}, Available: {product.Stock}");
                     throw new InvalidOperationException("Yeterli stok yok.");
                 }
 
-                existingCartItem.Quantity += addToCartDto.Quantity;
+                var existingCartItem = await _context.CartItems
+                    .FirstOrDefaultAsync(ci => ci.UserId == userId && ci.ProductId == addToCartDto.ProductId);
+
+                if (existingCartItem != null)
+                {
+                    _logger.LogInformation($"Existing cart item found: ID={existingCartItem.Id}, CurrentQuantity={existingCartItem.Quantity}");
+
+                    if (product.Stock < existingCartItem.Quantity + addToCartDto.Quantity)
+                    {
+                        _logger.LogWarning($"Insufficient stock for update. Current: {existingCartItem.Quantity}, Adding: {addToCartDto.Quantity}, Stock: {product.Stock}");
+                        throw new InvalidOperationException("Yeterli stok yok.");
+                    }
+
+                    existingCartItem.Quantity += addToCartDto.Quantity;
+                    _logger.LogInformation($"Updated quantity to: {existingCartItem.Quantity}");
+
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Changes saved successfully");
+
+                    return new CartItemDto
+                    {
+                        Id = existingCartItem.Id,
+                        ProductId = product.Id,
+                        ProductName = product.Name,
+                        ProductPrice = product.Price,
+                        ProductImageUrl = product.ImageUrl,
+                        Quantity = existingCartItem.Quantity,
+                        TotalPrice = product.Price * existingCartItem.Quantity
+                    };
+                }
+
+                _logger.LogInformation("Creating new cart item");
+                var cartItem = new CartItem
+                {
+                    UserId = userId,
+                    ProductId = addToCartDto.ProductId,
+                    Quantity = addToCartDto.Quantity
+                };
+
+                _context.CartItems.Add(cartItem);
                 await _context.SaveChangesAsync();
+
+                _logger.LogInformation($"New cart item created: ID={cartItem.Id}");
+
+                // Veritabanında gerçekten kaydedildi mi kontrol et
+                var savedItem = await _context.CartItems
+                    .Include(ci => ci.Product)
+                    .FirstOrDefaultAsync(ci => ci.Id == cartItem.Id);
+
+                if (savedItem != null)
+                {
+                    _logger.LogInformation($"Verification: Item saved successfully with ID={savedItem.Id}");
+                }
+                else
+                {
+                    _logger.LogError("ERROR: Item was not saved to database!");
+                }
 
                 return new CartItemDto
                 {
-                    Id = existingCartItem.Id,
+                    Id = cartItem.Id,
                     ProductId = product.Id,
                     ProductName = product.Name,
                     ProductPrice = product.Price,
                     ProductImageUrl = product.ImageUrl,
-                    Quantity = existingCartItem.Quantity,
-                    TotalPrice = product.Price * existingCartItem.Quantity
+                    Quantity = cartItem.Quantity,
+                    TotalPrice = product.Price * cartItem.Quantity
                 };
             }
-
-            var cartItem = new CartItem
+            catch (Exception ex)
             {
-                UserId = userId, // Misafir için sessionId kullanılacak
-                ProductId = addToCartDto.ProductId,
-                Quantity = addToCartDto.Quantity
-            };
-
-            _context.CartItems.Add(cartItem);
-            await _context.SaveChangesAsync();
-
-            return new CartItemDto
-            {
-                Id = cartItem.Id,
-                ProductId = product.Id,
-                ProductName = product.Name,
-                ProductPrice = product.Price,
-                ProductImageUrl = product.ImageUrl,
-                Quantity = cartItem.Quantity,
-                TotalPrice = product.Price * cartItem.Quantity
-            };
+                _logger.LogError(ex, $"Error in AddToCartAsync for userId: {userId}, productId: {addToCartDto.ProductId}");
+                throw;
+            }
         }
 
         // Misafir sepetini kullanıcı hesabına birleştir
         public async Task<bool> MergeGuestCartToUserAsync(string guestSessionId, string userId)
         {
+            _logger.LogInformation($"=== MergeGuestCartToUserAsync ===");
+            _logger.LogInformation($"GuestSessionId: {guestSessionId}");
+            _logger.LogInformation($"UserId: {userId}");
+
             var guestCartItems = await _context.CartItems
                 .Where(ci => ci.UserId == guestSessionId)
                 .ToListAsync();
+
+            _logger.LogInformation($"Found {guestCartItems.Count} guest cart items");
 
             if (!guestCartItems.Any())
                 return true;
 
             foreach (var guestItem in guestCartItems)
             {
+                _logger.LogInformation($"Processing guest item: ProductId={guestItem.ProductId}, Quantity={guestItem.Quantity}");
+
                 var existingUserItem = await _context.CartItems
                     .FirstOrDefaultAsync(ci => ci.UserId == userId && ci.ProductId == guestItem.ProductId);
 
                 if (existingUserItem != null)
                 {
                     // Mevcut kullanıcı sepetindeki ürün varsa, miktarları birleştir
+                    _logger.LogInformation($"Merging with existing user item: OldQuantity={existingUserItem.Quantity}, Adding={guestItem.Quantity}");
                     existingUserItem.Quantity += guestItem.Quantity;
                 }
                 else
                 {
                     // Yeni ürün olarak kullanıcı sepetine ekle
+                    _logger.LogInformation($"Moving guest item to user cart");
                     guestItem.UserId = userId;
                 }
             }
 
-            // Misafir sepetindeki öğeleri misafir için silmek istemiyorsak, sadece userId'yi güncelleriz
-            // Eğer silmek istiyorsak, aşağıdaki satırı açabiliriz:
-            // _context.CartItems.RemoveRange(guestCartItems.Where(g => g.UserId != userId));
-
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Guest cart merged successfully");
             return true;
         }
 
@@ -207,10 +276,15 @@ namespace EkoPazar.Services
 
         public async Task<decimal> GetCartTotalAsync(string userId)
         {
-            return await _context.CartItems
+            _logger.LogInformation($"=== GetCartTotalAsync for userId: {userId} ===");
+
+            var total = await _context.CartItems
                 .Include(ci => ci.Product)
                 .Where(ci => ci.UserId == userId)
                 .SumAsync(ci => ci.Product.Price * ci.Quantity);
+
+            _logger.LogInformation($"Cart total calculated: {total}");
+            return total;
         }
     }
 

@@ -54,7 +54,8 @@ const CartPage = () => {
             setActionLoading(false);
         }
     };
-
+    // CartPage.jsx'de handleRemove ve handleQuantityChange fonksiyonlarının sonuna:
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
     const handleCheckout = () => {
         if (cart.items.length === 0) {
             alert('Sepetiniz boş!');

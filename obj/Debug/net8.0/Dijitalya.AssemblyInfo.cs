@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Dijitalya")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+626de16b9e28e40409157e0dae5bdd58edb9e326")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d09e498ec92e189533fd92bd641ec8cc80e6fbe9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Dijitalya")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Dijitalya")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,16 +1,55 @@
 // ===== Navbar.jsx =====
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ApiService from '../api/ApiService';
 
 const Navbar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [cartItemCount, setCartItemCount] = useState(0); // Sepet ürün sayısı için state
+
+    // Sepet sayısını yükle
+    useEffect(() => {
+        const loadCartCount = async () => {
+            try {
+                const cartData = await ApiService.getCart();
+                setCartItemCount(cartData.itemCount || 0);
+            } catch (error) {
+                console.log('Cart count loading failed:', error);
+                setCartItemCount(0);
+            }
+        };
+        loadCartCount();
+    }, [user]); // user değiştiğinde sepet sayısını yeniden yükle
+
+    // Sepet güncellendiğinde sayıyı yenile (opsiyonel - event listener ile)
+    useEffect(() => {
+        const handleCartUpdate = () => {
+            const loadCartCount = async () => {
+                try {
+                    const cartData = await ApiService.getCart();
+                    setCartItemCount(cartData.itemCount || 0);
+                } catch (error) {
+                    console.log('Cart count refresh failed:', error);
+                }
+            };
+            loadCartCount();
+        };
+
+        // Custom event listener ekle (ProductCard'dan tetiklenebilir)
+        window.addEventListener('cartUpdated', handleCartUpdate);
+
+        return () => {
+            window.removeEventListener('cartUpdated', handleCartUpdate);
+        };
+    }, []);
 
     const handleLogout = () => {
         logout();
+        setCartItemCount(0); // Çıkış yapıldığında sepet sayısını sıfırla
         setIsMobileMenuOpen(false);
         navigate('/');
     };
@@ -65,7 +104,7 @@ const Navbar = () => {
 
                     {/* Sağ taraf menü */}
                     <div className="hidden md:flex items-center space-x-4">
-                        {/* Sepet linki - artık herkese görünür */}
+                        {/* Sepet linki - sayaç ile */}
                         <Link
                             to="/cart"
                             className={`flex items-center px-3 py-2 rounded transition-colors ${isActiveRoute('/cart')
@@ -73,7 +112,13 @@ const Navbar = () => {
                                 : 'hover:bg-blue-700'
                                 }`}
                         >
-                            🛒 Sepet
+                            <span className="mr-1">🛒</span>
+                            <span>Sepet</span>
+                            {cartItemCount > 0 && (
+                                <span className="ml-2 bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
+                                    {cartItemCount}
+                                </span>
+                            )}
                         </Link>
 
                         {user ? (
@@ -188,16 +233,21 @@ const Navbar = () => {
                                 Ürünler
                             </Link>
 
-                            {/* Mobile Sepet linki - artık herkese görünür */}
+                            {/* Mobile Sepet linki - sayaç ile */}
                             <Link
                                 to="/cart"
                                 onClick={closeMobileMenu}
-                                className={`block px-3 py-2 rounded transition-colors ${isActiveRoute('/cart')
+                                className={`flex items-center justify-between px-3 py-2 rounded transition-colors ${isActiveRoute('/cart')
                                     ? 'bg-blue-700 text-white'
                                     : 'hover:bg-blue-700'
                                     }`}
                             >
-                                🛒 Sepet
+                                <span>🛒 Sepet</span>
+                                {cartItemCount > 0 && (
+                                    <span className="bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
+                                        {cartItemCount}
+                                    </span>
+                                )}
                             </Link>
 
                             {user ? (

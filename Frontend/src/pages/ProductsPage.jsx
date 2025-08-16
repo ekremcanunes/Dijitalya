@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import ApiService from '../api/ApiService';
 import ProductCard from '../components/ProductCard';
 import { useAuth } from '../context/AuthContext';
+import { useNotification } from '../context/NotificationContext'; // YENİ İMPORT
 
 const ProductsPage = () => {
     const { user } = useAuth();
@@ -12,6 +13,7 @@ const ProductsPage = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [initialLoading, setInitialLoading] = useState(true);
+    const { showSuccess, showError } = useNotification(); // YENİ HOOK
 
     useEffect(() => {
         loadInitialData();
@@ -28,20 +30,22 @@ const ProductsPage = () => {
             setProducts(prods);
         } catch (error) {
             console.error('Products loading error:', error);
-            alert('Ürünler yüklenirken hata oluştu: ' + error.message);
+            // ❌ Eski: alert('Ürünler yüklenirken hata oluştu: ' + error.message);
+            showError('Ürünler yüklenirken hata oluştu: ' + error.message, 'Yükleme Hatası'); // ✅ Yeni
         } finally {
             setInitialLoading(false);
         }
     };
 
     const handleAddToCart = async (productId, quantity = 1) => {
-        // Global loading kaldırıldı - her ProductCard kendi loading'ini yönetiyor
         try {
             await ApiService.addToCart(productId, quantity);
-            alert('Ürün sepete eklendi!');
+            // ❌ Eski: alert('Ürün sepete eklendi!');
+            showSuccess('Ürün sepete eklendi!', 'Sepete Eklendi'); // ✅ Yeni - otomatik kapanır
         } catch (error) {
             console.error('Add to cart error:', error);
-            alert('Sepete eklerken bir hata oluştu: ' + error.message);
+            // ❌ Eski: alert('Sepete eklerken bir hata oluştu: ' + error.message);
+            showError('Sepete eklerken bir hata oluştu: ' + error.message, 'Sepet Hatası'); // ✅ Yeni
         }
     };
 
@@ -104,7 +108,6 @@ const ProductsPage = () => {
                         key={product.id}
                         product={product}
                         onAddToCart={handleAddToCart}
-                    // disabled prop kaldırıldı - ProductCard kendi loading state'ini yönetiyor
                     />
                 ))}
             </div>

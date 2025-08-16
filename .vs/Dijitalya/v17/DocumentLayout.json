@@ -1,7 +1,24 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Devops\\EkoPazar\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F1261A31-2AB5-40FD-9D41-884BA7980CF1}|Dijitalya.csproj|c:\\devops\\ekopazar\\frontend\\src\\pages\\productspage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{F1261A31-2AB5-40FD-9D41-884BA7980CF1}|Dijitalya.csproj|solutionrelative:frontend\\src\\pages\\productspage.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F1261A31-2AB5-40FD-9D41-884BA7980CF1}|Dijitalya.csproj|c:\\devops\\ekopazar\\frontend\\src\\app.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{F1261A31-2AB5-40FD-9D41-884BA7980CF1}|Dijitalya.csproj|solutionrelative:frontend\\src\\app.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F1261A31-2AB5-40FD-9D41-884BA7980CF1}|Dijitalya.csproj|c:\\devops\\ekopazar\\frontend\\src\\context\\notificationcontext.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{F1261A31-2AB5-40FD-9D41-884BA7980CF1}|Dijitalya.csproj|solutionrelative:frontend\\src\\context\\notificationcontext.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F1261A31-2AB5-40FD-9D41-884BA7980CF1}|Dijitalya.csproj|c:\\devops\\ekopazar\\frontend\\src\\components\\notificationmodal.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{F1261A31-2AB5-40FD-9D41-884BA7980CF1}|Dijitalya.csproj|solutionrelative:frontend\\src\\components\\notificationmodal.jsx||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +26,59 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProductsPage.jsx",
+              "DocumentMoniker": "C:\\Devops\\EkoPazar\\Frontend\\src\\pages\\ProductsPage.jsx",
+              "RelativeDocumentMoniker": "Frontend\\src\\pages\\ProductsPage.jsx",
+              "ToolTip": "C:\\Devops\\EkoPazar\\Frontend\\src\\pages\\ProductsPage.jsx",
+              "RelativeToolTip": "Frontend\\src\\pages\\ProductsPage.jsx",
+              "ViewState": "AgIAABUAAAAAAAAAAAAkwIEAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-08-16T14:11:29.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "App.jsx",
+              "DocumentMoniker": "C:\\Devops\\EkoPazar\\Frontend\\src\\App.jsx",
+              "RelativeDocumentMoniker": "Frontend\\src\\App.jsx",
+              "ToolTip": "C:\\Devops\\EkoPazar\\Frontend\\src\\App.jsx",
+              "RelativeToolTip": "Frontend\\src\\App.jsx",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-08-16T14:09:37.447Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "NotificationContext.jsx",
+              "DocumentMoniker": "C:\\Devops\\EkoPazar\\Frontend\\src\\context\\NotificationContext.jsx",
+              "RelativeDocumentMoniker": "Frontend\\src\\context\\NotificationContext.jsx",
+              "ToolTip": "C:\\Devops\\EkoPazar\\Frontend\\src\\context\\NotificationContext.jsx",
+              "RelativeToolTip": "Frontend\\src\\context\\NotificationContext.jsx",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAwwIgAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-08-16T14:08:45.916Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "NotificationModal.jsx",
+              "DocumentMoniker": "C:\\Devops\\EkoPazar\\Frontend\\src\\components\\NotificationModal.jsx",
+              "RelativeDocumentMoniker": "Frontend\\src\\components\\NotificationModal.jsx",
+              "ToolTip": "C:\\Devops\\EkoPazar\\Frontend\\src\\components\\NotificationModal.jsx",
+              "RelativeToolTip": "Frontend\\src\\components\\NotificationModal.jsx",
+              "ViewState": "AgIAAMAAAAAAAAAAAAAwwMkAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003663|",
+              "WhenOpened": "2025-08-16T14:08:19.509Z",
+              "EditorCaption": ""
             }
           ]
         }

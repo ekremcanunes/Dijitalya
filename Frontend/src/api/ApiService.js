@@ -2,6 +2,26 @@
 
 const API_BASE_URL = 'https://localhost:7203/api';
 
+// Guest ID yönetimi
+const getGuestId = () => {
+    let guestId = localStorage.getItem('guestId');
+    if (!guestId) {
+        guestId = generateUUID();
+        localStorage.setItem('guestId', guestId);
+        console.log('🆔 New guest ID created:', guestId);
+    } else {
+        console.log('🆔 Using existing guest ID:', guestId);
+    }
+    return guestId;
+};
+
+const generateUUID = () => {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+};
+
 const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
@@ -10,14 +30,22 @@ const api = axios.create({
     withCredentials: true, // Session için gerekli
 });
 
-// Request interceptor - token ekleme
+// Request interceptor - token ve guest ID ekleme
 api.interceptors.request.use(
     (config) => {
         console.log('🚀 API Request:', config.method?.toUpperCase(), config.url);
+
+        // Auth token ekle
         const token = localStorage.getItem('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
+        } else {
+            // Token yoksa guest ID ekle
+            const guestId = getGuestId();
+            config.headers['X-Guest-Id'] = guestId;
+            console.log('🆔 Added guest ID to request:', guestId);
         }
+
         return config;
     },
     (error) => {
@@ -67,6 +95,8 @@ const ApiService = {
             if (response.data.accessToken) {
                 try {
                     await api.post('/cart/merge');
+                    // Login sonrası guest ID'yi temizle
+                    localStorage.removeItem('guestId');
                 } catch (mergeError) {
                     console.warn('⚠️ Sepet birleştirme hatası:', mergeError);
                     // Birleştirme hatası login'i engellemez
@@ -95,6 +125,8 @@ const ApiService = {
             if (response.data.accessToken) {
                 try {
                     await api.post('/cart/merge');
+                    // Register sonrası guest ID'yi temizle
+                    localStorage.removeItem('guestId');
                 } catch (mergeError) {
                     console.warn('⚠️ Sepet birleştirme hatası:', mergeError);
                 }
@@ -111,6 +143,16 @@ const ApiService = {
             console.error('❌ Register failed:', error);
             throw new Error(error.response?.data?.message || 'Kayıt başarısız');
         }
+    },
+
+    // Logout işlemi - guest ID'yi temizleme
+    logout: () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('refreshToken');
+        // Logout sonrası yeni guest ID oluştur
+        localStorage.removeItem('guestId');
+        console.log('🔄 Logout: Guest ID cleared, new one will be created on next request');
     },
 
     // Product işlemleri

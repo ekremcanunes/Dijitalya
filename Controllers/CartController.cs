@@ -30,26 +30,34 @@ namespace EkoPazar.Controllers
                     return userId;
                 }
 
-                // Giriş yapmamışsa session ID kullan
-                var sessionId = HttpContext.Session.GetString("GuestSessionId");
-                if (string.IsNullOrEmpty(sessionId))
+                // Giriş yapmamışsa header'dan guest ID al
+                var guestId = Request.Headers["X-Guest-Id"].FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(guestId))
                 {
-                    sessionId = Guid.NewGuid().ToString();
-                    HttpContext.Session.SetString("GuestSessionId", sessionId);
-                    _logger.LogInformation($"Created new guest session: {sessionId}");
-                }
-                else
-                {
-                    _logger.LogInformation($"Existing guest session: {sessionId}");
+                    _logger.LogInformation($"Using guest ID from header: {guestId}");
+                    return $"guest_{guestId}";
                 }
 
-                return $"guest_{sessionId}";
+                // Fallback: Session dene
+                var sessionId = HttpContext.Session.GetString("GuestSessionId");
+                if (!string.IsNullOrEmpty(sessionId))
+                {
+                    _logger.LogInformation($"Using session ID: {sessionId}");
+                    return $"guest_{sessionId}";
+                }
+
+                // Son çare: Yeni ID oluştur ama bu durumda sepet kaybedilir
+                var newId = Guid.NewGuid().ToString();
+                _logger.LogWarning($"No guest ID found, creating fallback: {newId}");
+                return $"guest_{newId}";
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in GetUserIdentifier");
-                // Fallback: Session çalışmıyorsa basit bir ID oluştur
-                return $"fallback_{Guid.NewGuid().ToString()[..8]}";
+                var fallbackId = $"fallback_{Guid.NewGuid().ToString()[..8]}";
+                _logger.LogWarning($"Using fallback identifier: {fallbackId}");
+                return fallbackId;
             }
         }
 
@@ -68,9 +76,11 @@ namespace EkoPazar.Controllers
                 {
                     items = cartItems,
                     total = total,
-                    itemCount = cartItems.Sum(item => item.Quantity)
+                    itemCount = cartItems.Sum(item => item.Quantity),
+                    userIdentifier = userIdentifier // Debug için
                 };
 
+                _logger.LogInformation($"Cart response: {cartItems.Count()} items, total: {total}");
                 return Ok(response);
             }
             catch (Exception ex)
@@ -95,11 +105,12 @@ namespace EkoPazar.Controllers
                     return BadRequest(new { message = "Ürün bulunamadı veya aktif değil" });
                 }
 
-                return Ok(new { message = "Ürün sepete eklendi", cartItem });
+                _logger.LogInformation($"Successfully added item to cart: {cartItem.ProductName}");
+                return Ok(new { message = "Ürün sepete eklendi", cartItem, userIdentifier });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error adding to cart. User: {GetUserIdentifier()}, ProductId: {addToCartDto.ProductId}");
+                _logger.LogError(ex, $"Error adding to cart. ProductId: {addToCartDto.ProductId}");
                 return BadRequest(new { message = ex.Message, details = ex.InnerException?.Message });
             }
         }
@@ -121,7 +132,7 @@ namespace EkoPazar.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating cart item. User: {GetUserIdentifier()}, ProductId: {productId}");
+                _logger.LogError(ex, $"Error updating cart item. ProductId: {productId}");
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -143,7 +154,7 @@ namespace EkoPazar.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error removing from cart. User: {GetUserIdentifier()}, ProductId: {productId}");
+                _logger.LogError(ex, $"Error removing from cart. ProductId: {productId}");
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -155,12 +166,13 @@ namespace EkoPazar.Controllers
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var guestSessionId = HttpContext.Session.GetString("GuestSessionId");
+                var guestId = Request.Headers["X-Guest-Id"].FirstOrDefault();
 
-                if (!string.IsNullOrEmpty(guestSessionId))
+                _logger.LogInformation($"Merging cart: UserId={userId}, GuestId={guestId}");
+
+                if (!string.IsNullOrEmpty(guestId))
                 {
-                    await _cartService.MergeGuestCartToUserAsync($"guest_{guestSessionId}", userId);
-                    HttpContext.Session.Remove("GuestSessionId");
+                    await _cartService.MergeGuestCartToUserAsync($"guest_{guestId}", userId);
                 }
 
                 return Ok(new { message = "Sepet birleştirildi" });
@@ -170,6 +182,23 @@ namespace EkoPazar.Controllers
                 _logger.LogError(ex, "Error merging guest cart");
                 return BadRequest(new { message = ex.Message });
             }
+        }
+
+        // Debug endpoint
+        [HttpGet("debug")]
+        public IActionResult Debug()
+        {
+            var userIdentifier = GetUserIdentifier();
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var guestId = Request.Headers["X-Guest-Id"].FirstOrDefault();
+
+            return Ok(new
+            {
+                UserIdentifier = userIdentifier,
+                AuthenticatedUserId = userId,
+                GuestIdFromHeader = guestId,
+                IsAuthenticated = User.Identity?.IsAuthenticated ?? false
+            });
         }
     }
 

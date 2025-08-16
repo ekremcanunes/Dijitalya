@@ -394,6 +394,16 @@
   },
   {
     "ContainingType": "EkoPazar.Controllers.CartController",
+    "Method": "Debug",
+    "RelativePath": "api/Cart/debug",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EkoPazar.Controllers.CartController",
     "Method": "MergeGuestCart",
     "RelativePath": "api/Cart/merge",
     "HttpMethod": "POST",
